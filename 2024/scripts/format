@@ -21,6 +21,9 @@ main() {
   # Move into year directory.
   cd "${YEAR}"
 
+  # Ensure dev dependencies are installed.
+  ${UV_EXEC} sync --group dev
+
   # Format python files.
   ${UV_EXEC} run ruff format src tests
 }

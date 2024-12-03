@@ -23,7 +23,7 @@ main() {
   cd "${YEAR}"
 
   # Install python project.
-  ${UV_EXEC} sync --group tests
+  ${UV_EXEC} sync --no-dev
 }
 main "${@}"
 
