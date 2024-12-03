@@ -31,6 +31,12 @@ main() {
   # Generate day file path.
   day_file="src/bin/day_${day}"
 
+  # Ensure day file exists.
+  if [ ! -f "${day_file}" ]; then
+    echo 'Error: Could not find day file to execute.' 1>&2
+    exit 3
+  fi
+
   # Run the day entrypoint script.
   ${day_file}
 }

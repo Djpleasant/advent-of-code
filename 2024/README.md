@@ -1,5 +1,7 @@
 # 2024
 
+[Advent of Code 2024](https://adventofcode.com/2024/about)
+
 This is the first time I've participated in a community event like this, so I
 suspect I'm going to be doing a lot of code referencing from past years and
 solutions for this year.
