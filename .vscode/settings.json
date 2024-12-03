@@ -1,8 +1,9 @@
 {
+    "files.insertFinalNewline": true,
     "editor.renderWhitespace": "all",
     "editor.rulers": [
         80,
-        120
+        100
     ],
     "[shellscript]": {
         "editor.tabSize": 2,
@@ -10,4 +11,7 @@
     "[python]": {
         "editor.tabSize": 4,
     },
+    "[rust]": {
+        "editor.tabSize": 4,
+    }
 }
