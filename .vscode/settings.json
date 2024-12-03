@@ -1,0 +1,13 @@
+{
+    "editor.renderWhitespace": "all",
+    "editor.rulers": [
+        80,
+        120
+    ],
+    "[shellscript]": {
+        "editor.tabSize": 2,
+    },
+    "[python]": {
+        "editor.tabSize": 4,
+    },
+}
