@@ -1,0 +1,37 @@
+#!/bin/sh
+
+# Runs the day script for the provided day.
+
+set -e
+
+# ----------#
+# Globals #
+# ----------#
+YEAR=2024
+
+# ------------#
+# Functions #
+# ------------#
+
+# -------#
+# Main #
+# -------#
+main() {
+  # Pull day number from args.
+  if [ -z "${1}" ]; then
+    echo 'Error: You must provide a day to run (e.g. 01).' 1>&2
+    exit 3
+  fi
+  day="${1}"
+  shift 1
+
+  # Move into year directory.
+  cd "${YEAR}"
+
+  # Generate day file path.
+  day_file="src/bin/day_${day}"
+
+  # Run the day entrypoint script.
+  ${day_file}
+}
+main "${@}"

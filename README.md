@@ -1,25 +1,15 @@
-# advent-of-code
+# aoc-python
 
-Collection of my attempts at the 
-[Advent of Code yearly event](https://adventofcode.com/).
+This is a collection of my [Advent of Code](https://adventofcode.com/) attemps
+across the years.
 
-Solutions will be organized by year within their respective language branches:
+In each year directory, there will be a README.md file. This file will detail
+what my goals were for this year's AoC. I want to try and use this event as a
+way to learn different tools or languages.
 
-- [python](https://github.com/Djpleasant/advent-of-code/tree/aoc-python)
+So if you are interested in what I was trying to do on a particular year, take
+a look at that file.
 
-- [rust](https://github.com/Djpleasant/advent-of-code/tree/aoc-rust)
+# Years
 
-# Current goals
-
-- Learn how to use the Python package manager,
-[uv](https://github.com/astral-sh/uv).
-
-- Dip my toes into the [rust](https://www.rust-lang.org/)y-water and see how
-I do.
-
-# Distribution
-
-If something posses you to copy my code examples, please make note of the
-[license](https://github.com/Djpleasant/advent-of-code/blob/main/LICENSE).
-
-That lets you do want you want with all this. Have fun and call your mom.
+- [2024](./2024/README.md)

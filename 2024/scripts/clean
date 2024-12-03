@@ -1,0 +1,40 @@
+#!/bin/sh
+
+# Removes generated files built by the AoC 2024 project.
+
+set -e
+
+# ----------#
+# Globals #
+# ----------#
+YEAR=2024
+UV_EXEC=${UV_EXEC:-"uv"}
+
+
+# ------------#
+# Functions #
+# ------------#
+
+# -------#
+# Main #
+# -------#
+main() {
+  # Move into year directory.
+  cd "${YEAR}"
+
+  # If virtual environment is activated, tell user and throw error.
+  if [ -n "${VIRTUAL_ENV}" ]; then
+    echo 'Error: Please deactivate python virtual environment first.' 1>&2
+    exit 3
+  fi
+
+  # Clean environment.
+  rm -rf ./.venv
+  rm -rf ./.ruff_cache
+  rm -rf ./.pytest_cache
+  rm -f .coverage
+  find . -type d -name '__pycache__' -exec rm -rf {} +
+}
+main "${@}"
+
+

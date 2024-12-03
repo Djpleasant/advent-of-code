@@ -1,0 +1,31 @@
+[project]
+name = "advent-of-code"
+version = "0.1.0"
+description = "Add your description here"
+readme = "./README.md"
+requires-python = ">=3.10"
+dependencies = [
+]
+
+[dependency-groups]
+dev = [
+    "ruff>=0.8.1",
+]
+tests = [
+    "pytest>=8.3.4",
+    "pytest-cov>=6.0.0",
+]
+
+[tool.ruff]
+line-length = 80
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "B", "PIE"]
+ignore = ["B904", "B028"]
+
+[tool.ruff.format]
+docstring-code-format = true
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"

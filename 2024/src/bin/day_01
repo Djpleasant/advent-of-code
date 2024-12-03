@@ -1,0 +1,23 @@
+#!/bin/sh
+
+# Runs the Aoc 2024 - Day 01 solution.
+
+set -e
+
+# ----------#
+# Globals #
+# ----------#
+UV_EXEC=${UV_EXEC:-"uv"}
+
+# ------------#
+# Functions #
+# ------------#
+
+# -------#
+# Main #
+# -------#
+main() {
+  # Run the day entrypoint.
+  ${UV_EXEC} run python -m advent_of_code.day_01 "${@}"
+}
+main "${@}"

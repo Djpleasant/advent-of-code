@@ -1,0 +1,32 @@
+#!/bin/sh
+
+# Runs the linters on the AoC 2024 project.
+
+set -e
+
+# ----------#
+# Globals #
+# ----------#
+YEAR=2024
+UV_EXEC=${UV_EXEC:-"uv"}
+
+# ------------#
+# Functions #
+# ------------#
+
+# -------#
+# Main #
+# -------#
+main() {
+  # Move into year directory.
+  cd "${YEAR}"
+
+  # Ensure test dependencies are installed.
+  ${UV_EXEC} sync --group tests
+
+  # Run tests.
+  ${UV_EXEC} run pytest --cov=src
+}
+main "${@}"
+
+
