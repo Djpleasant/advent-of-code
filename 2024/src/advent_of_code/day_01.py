@@ -5,6 +5,7 @@
 
 import argparse
 import asyncio
+import json
 import sys
 from pathlib import Path
 from typing import (
@@ -86,13 +87,72 @@ def read_input_data(file: Path) -> tuple[Sequence[int], Sequence[int]]:
     with file.open("r", encoding="utf-8") as f:
         data_lines = f.readlines()
 
+    # Create lists from the input data.
     for line in data_lines:
         list_one_item, list_two_item = parse_input_data_row(row=line)
         list_one.append(list_one_item)
         list_two.append(list_two_item)
 
+    # Verify list lengths are the same.
+    if len(list_one) != len(list_two):
+        raise ValueError("List lengths do not match.", list_one, list_two)
+
     # Return lists.
     return (tuple(list_one), tuple(list_two))
+
+
+def pop_smallest_number(numbers: Sequence[int]) -> tuple[int, Sequence[int]]:
+    # Get max int size so the first element is guaranteed to be smaller.
+    min_number = sys.maxsize
+    min_index = -1
+
+    # Loop over list and get the smallest number and its index.
+    for i, num in enumerate(numbers):
+        if num < min_number:
+            min_number = num
+            min_index = i
+
+    # Copy the list but ignore smallest number.
+    trimmed_list = [numbers[i] for i in range(len(numbers)) if i != min_index]
+
+    # Return the smallest number and the original list without that number.
+    return (min_number, trimmed_list)
+
+
+def calculate_lists_distance(
+    list_one: Sequence[int], list_two: Sequence[int]
+) -> int:
+    total_distance = 0
+    for _ in range(len(list_one)):
+        list_one_smallest, list_one = pop_smallest_number(numbers=list_one)
+        list_two_smallest, list_two = pop_smallest_number(numbers=list_two)
+        if list_one_smallest != list_two_smallest:
+            total_distance += abs(list_one_smallest - list_two_smallest)
+    return total_distance
+
+
+def calculate_simularity_score(
+    list_one: Sequence[int], list_two: Sequence[int]
+) -> int:
+    # Define score to add to.
+    simularity_score = 0
+
+    # Generate a map of unique list two numbers and how often they occur.
+    list_two_hash = {}
+    for num in list_two:
+        if num in list_two_hash.keys():
+            list_two_hash[num] = list_two_hash[num] + 1
+        else:
+            list_two_hash[num] = 1
+
+    # If the list one item appears in list two, multiply itself by the number
+    # of instances found in list two, then add that to the total.
+    for num in list_one:
+        if num in list_two_hash.keys():
+            simularity_score += num * list_two_hash[num]
+
+    # Return calculation.
+    return simularity_score
 
 
 # -------#
@@ -106,10 +166,24 @@ async def aentrypoint(args: Sequence[str]) -> int:
     # Get lists.
     list_one, list_two = read_input_data(cli.input_data_file)
 
-    print(f"List one has {len(list_one)} item(s) in it.")
-    print(f"List one has {len(list_two)} item(s) in it.")
+    # Get the distance between the lists
+    total_distance = calculate_lists_distance(
+        list_one=list_one, list_two=list_two
+    )
 
-    # Indicate success.
+    # Get the simularity score.
+    simularity_score = calculate_simularity_score(
+        list_one=list_one, list_two=list_two
+    )
+
+    # Build report.
+    report = {
+        "total_distance": total_distance,
+        "simularity_score": simularity_score,
+    }
+
+    # Print list to stdout and return success.
+    print(json.dumps(report), file=sys.stdout)
     return 0
 
 
