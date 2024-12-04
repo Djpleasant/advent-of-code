@@ -120,9 +120,7 @@ def _pop_smallest_number(numbers: Sequence[int]) -> tuple[int, Sequence[int]]:
     return (min_number, trimmed_list)
 
 
-def do_part_one(
-    list_one: Sequence[int], list_two: Sequence[int]
-) -> int:
+def do_part_one(list_one: Sequence[int], list_two: Sequence[int]) -> int:
     total_distance = 0
     for _ in range(len(list_one)):
         list_one_smallest, list_one = _pop_smallest_number(numbers=list_one)
@@ -132,9 +130,7 @@ def do_part_one(
     return total_distance
 
 
-def do_part_two(
-    list_one: Sequence[int], list_two: Sequence[int]
-) -> int:
+def do_part_two(list_one: Sequence[int], list_two: Sequence[int]) -> int:
     # Define score to add to.
     simularity_score = 0
 
@@ -168,19 +164,15 @@ async def aentrypoint(args: Sequence[str]) -> int:
     list_one, list_two = _read_input_data(cli.input_data_file)
 
     # Get the distance between the lists
-    total_distance = do_part_one(
-        list_one=list_one, list_two=list_two
-    )
+    total_distance = do_part_one(list_one=list_one, list_two=list_two)
 
     # Get the simularity score.
-    simularity_score = do_part_two(
-        list_one=list_one, list_two=list_two
-    )
+    simularity_score = do_part_two(list_one=list_one, list_two=list_two)
 
     # Build data to output.
     output: Mapping[str, int] = {
-        "total_distance": total_distance,
-        "simularity_score": simularity_score,
+        "part_one": total_distance,
+        "part_two": simularity_score,
     }
 
     # Print output to stdout and return success.

@@ -1,7 +1,12 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-"""https://adventofcode.com/2024/day/2"""
+"""https://adventofcode.com/2024/day/2
+
+- https://github.com/maread99/aoc/blob/main/2024/02.py
+    - This was a helpful reference when I got stuck with
+      part two.
+"""
 
 import argparse
 import asyncio
@@ -10,14 +15,17 @@ import sys
 from pathlib import Path
 from typing import (
     NamedTuple,
-    Sequence,
+    Mapping,
 )
+import itertools
 
 # ----------#
 # Globals #
 # ----------#
 INPUT_DATA_FILE = Path("static/day_02")
 
+LEVEL_MIN_VARIANCE = 1
+LEVEL_MAX_VARIANCE = 3
 
 class CliArguments(NamedTuple):
     input_data_file: Path
@@ -26,7 +34,7 @@ class CliArguments(NamedTuple):
 # ------------#
 # Functions #
 # ------------#
-def validate_cli_aruguments(cli: CliArguments):
+def _validate_cli_aruguments(cli: CliArguments):
     """Run validation checks on cli arguments."""
     # Verify file exists.
     if not cli.input_data_file.exists():
@@ -38,7 +46,7 @@ def validate_cli_aruguments(cli: CliArguments):
     return True
 
 
-def parse_cli_arguments(args: list[str]) -> CliArguments:
+def _parse_cli_arguments(args: list[str]) -> CliArguments:
     """Creates a parser to consume the arguments provided to the script."""
     # Create parser.
     parser = argparse.ArgumentParser(
@@ -62,7 +70,7 @@ def parse_cli_arguments(args: list[str]) -> CliArguments:
     return args
 
 
-def parse_input_data_row(row: str) -> Sequence[int]:
+def _parse_input_data_row(row: str) -> list[int]:
     # Sanitize and split row into int items.
     split_row = row.strip().split()
 
@@ -70,10 +78,10 @@ def parse_input_data_row(row: str) -> Sequence[int]:
     processed_row = [int(num) for num in split_row]
 
     # Return row of ints.
-    return tuple(processed_row)
+    return list(processed_row)
 
 
-def read_input_data(file: Path) -> None:
+def _read_input_data(file: Path) -> None:
     # Define reports container.
     all_reports = []
 
@@ -83,16 +91,26 @@ def read_input_data(file: Path) -> None:
 
     # Create lists from the input data.
     for line in data_lines:
-        reports = parse_input_data_row(row=line)
+        reports = _parse_input_data_row(row=line)
         all_reports.append(reports)
 
     # Return lists.
-    return tuple(all_reports)
+    return list(all_reports)
 
+def _get_report_with_level_removed(
+    report: list[int], level_index: int
+) -> list[int]:
+    filtered_report = report.copy()
+    del filtered_report[level_index]
+    return filtered_report
 
-def report_is_good(report: Sequence[int]) -> bool:
-    report_trending_direction = None
-    report_has_failed_once = False
+def _get_level_step_observations(level: int, next_level: int) -> tuple[int, bool]:
+    level_variance = abs(level - next_level)
+    level_trend = next_level > level
+    return (level_variance, level_trend)
+
+def _report_passes_draconian_standards(report: list[int]) -> bool:
+    report_trending_direction: bool = None
     for i in range(len(report)):
         # Break when the last item is the current level.
         if i == (len(report) - 1):
@@ -124,32 +142,68 @@ def report_is_good(report: Sequence[int]) -> bool:
 
     return True
 
+def _report_passes_regular_standards(report: list[int]) -> bool|int:
+    # Set the report trend based on the first two elements.
+    report_trend = report[1] > report[0]
+    for level, next_level in itertools.pairwise(report):
+        variance, trend = _get_level_step_observations(
+            level=level,
+            next_level=next_level,
+        )
+        # Check for consistent trend.
+        if report_trend != trend:
+            return False
 
-def get_number_of_good_reports(reports):
+        # Check for in-bounds variance.
+        if not (LEVEL_MIN_VARIANCE <= variance <= LEVEL_MAX_VARIANCE):
+            return False
+    return True
+
+def do_part_one(reports: list[list[int]]) -> int:
     good_reports_count = 0
     for report in reports:
-        if report_is_good(report=report):
+        if _report_passes_draconian_standards(report=report):
             good_reports_count += 1
+    return good_reports_count
+
+
+def do_part_two(reports: list[list[int]]) -> int:
+    good_reports_count = 0
+    for report in reports:
+        report_is_safe = _report_passes_regular_standards(report=report)
+        if not report_is_safe:
+            for i in range(len(report)):
+                _report = report.copy()
+                del _report[i]
+                report_is_safe = _report_passes_regular_standards(report=_report)
+                if report_is_safe:
+                    break
+        if report_is_safe:
+            good_reports_count += 1
+        else:
+            pass
     return good_reports_count
 
 
 # -------#
 # Main #
 # -------#
-async def aentrypoint(args: Sequence[str]) -> int:
+async def aentrypoint(args: list[str]) -> int:
     """Script entrypoint function."""
     # Get processed cli arguments.
-    cli = parse_cli_arguments(args=args)
+    cli = _parse_cli_arguments(args=args)
 
     # Get lists.
-    reports = read_input_data(cli.input_data_file)
+    reports = _read_input_data(cli.input_data_file)
 
     # Determine the amount of good reports.
-    good_reports_count = get_number_of_good_reports(reports=reports)
+    good_reports_by_draconian_standards = do_part_one(reports=reports)
+    good_reports_by_regular_standards = do_part_two(reports=reports)
 
     # Build data to output.
-    output = {
-        "good_reports": good_reports_count,
+    output: Mapping[str, int] = {
+        "part_one": good_reports_by_draconian_standards,
+        "part_two": good_reports_by_regular_standards,
     }
 
     # Print list to stdout and return success.
