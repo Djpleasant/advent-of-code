@@ -22,7 +22,7 @@ main() {
   cd "${YEAR}"
 
   # Format python files.
-  ${UV_EXEC} run ruff format src tests
+  ${UV_EXEC} run ruff format src
 }
 main "${@}"
 

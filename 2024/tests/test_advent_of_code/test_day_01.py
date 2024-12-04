@@ -12,6 +12,7 @@ from advent_of_code.day_01 import (
 # Globals #
 # ----------#
 
+
 # ------------#
 # Functions #
 # ------------#
