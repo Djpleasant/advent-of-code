@@ -1,0 +1,30 @@
+#!/bin/sh
+
+# Builds the project Containerfile.
+
+set -e
+
+# ----------#
+# Globals #
+# ----------#
+CONTAINER_EXEC=${CONTAINER_EXEC:-"podman"}
+CONTAINER_NAME=${CONTAINER_NAME:-"localhost/development/advent-of-code"}
+CONTAINER_FILE=${CONTAINER_FILE:-"$(pwd)/Containerfile"}
+
+# ------------#
+# Functions #
+# ------------#
+
+# -------#
+# Main #
+# -------#
+main() {
+  # Build container.
+  ${CONTAINER_EXEC} build --tag "${CONTAINER_NAME}" \
+    --file ${CONTAINER_FILE} \
+    .
+  
+  # Prune images.
+  ${CONTAINER_EXEC} image prune -f
+}
+main "${@}"

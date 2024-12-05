@@ -1,0 +1,31 @@
+#!/bin/sh
+
+# Builds the project Containerfile.
+
+set -e
+
+# ----------#
+# Globals #
+# ----------#
+CONTAINER_EXEC=${CONTAINER_EXEC:-"podman"}
+CONTAINER_IMAGE=${CONTAINER_IMAGE:-"localhost/development/advent-of-code"}
+CONTAINER_NAME=${CONTAINER_NAME:-"advent-of-code"}
+
+SHARE_DIR=${SHARE_DIR:-"$(pwd)"}
+
+# ------------#
+# Functions #
+# ------------#
+
+# -------#
+# Main #
+# -------#
+main() {
+  # Build container.
+  ${CONTAINER_EXEC} run --rm \
+    -it \
+    --name "${CONTAINER_NAME}" \
+    --volume "${SHARE_DIR}":/usr/src/app:Z \
+    ${CONTAINER_IMAGE}
+}
+main "${@}"

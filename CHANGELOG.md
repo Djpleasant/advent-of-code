@@ -7,6 +7,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased] - 20??/??/??
 
+## [2024.2.1] - 2024/12/04
+
+### Added
+
+- Added Containerfile to use uv in an isolated environment.
+
+### Fixed
+
+- Fixed broken function imports in the 2024 test files.
 
 ## [2024.2.0] - 2024/12/04
 

@@ -1,0 +1,13 @@
+# Ignore everything.
+*
+
+# Specify exceptions.
+!scripts/
+!docs/
+!.python-version
+!CHANGELOG.md
+!LICENSE
+!mkdocs.yml
+!pyproject.toml
+!README.md
+!uv.lock
