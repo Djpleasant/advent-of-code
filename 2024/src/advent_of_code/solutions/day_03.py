@@ -12,6 +12,7 @@ from typing import (
     NamedTuple,
     Mapping,
 )
+import re
 
 from advent_of_code.utils import read_input_data
 
@@ -25,6 +26,7 @@ INPUT_DATA_FILE = Path("static/day_03")
 LEVEL_MIN_VARIANCE = 1
 LEVEL_MAX_VARIANCE = 3
 
+PART_ONE_REGEX_PATTERN = r"mul\(\d{1,3},\d{1,3}\)"
 
 class CliArguments(NamedTuple):
     input_data_file: Path
@@ -68,12 +70,33 @@ def _parse_cli_arguments(args: list[str]) -> CliArguments:
     # Return parsed cli arguments.
     return args
 
+def calculate_matched_expression(expression: str) -> int:
+    # Strip 'mul(' from the expression.
+    expression = expression[4:]
+
+    # Strip ')' from the expression.
+    expression = expression[:-1]
+
+    # Parse ints from remaining expression.
+    nums = expression.split(',')
+    first = int(nums[0])
+    second = int(nums[1])
+    
+    # Calculate expression and return value.
+    calc = first * second
+    return calc
 
 # -------#
 # Main #
 # -------#
 def do_part_one(input_data: list[str]) -> int:
-    return 0
+    total = 0
+    for line in input_data:
+        matches = re.findall(pattern=PART_ONE_REGEX_PATTERN, string=line)
+        for match in matches:
+            calc = calculate_matched_expression(expression=match)
+            total+=calc
+    return total
 
 
 def do_part_two(input_data: list[str]) -> int:
