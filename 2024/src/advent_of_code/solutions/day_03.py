@@ -23,10 +23,8 @@ SOLUTION_NAME = "AoC 2024 - Day 03"
 
 INPUT_DATA_FILE = Path("static/day_03")
 
-LEVEL_MIN_VARIANCE = 1
-LEVEL_MAX_VARIANCE = 3
-
 PART_ONE_REGEX_PATTERN = r"mul\(\d{1,3},\d{1,3}\)"
+PART_TWO_REGEX_PATTERN = r"(mul\(\d{1,3},\d{1,3}\)|do\(\)|don\'t\(\))"
 
 class CliArguments(NamedTuple):
     input_data_file: Path
@@ -100,7 +98,22 @@ def do_part_one(input_data: list[str]) -> int:
 
 
 def do_part_two(input_data: list[str]) -> int:
-    return 0
+    total = 0
+    calculate_enabled: bool = True
+    for line in input_data:
+        matches: list[str] = re.findall(pattern=PART_TWO_REGEX_PATTERN, string=line)
+        for match in matches:
+            if match == "do()":
+                calculate_enabled = True
+                continue
+            elif match == "don't()":
+                calculate_enabled = False
+                continue
+
+            if calculate_enabled:
+                calc = calculate_matched_expression(expression=match)
+                total+=calc
+    return total
 
 
 async def aentrypoint(args: list[str]) -> int:

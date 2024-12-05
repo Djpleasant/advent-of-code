@@ -7,9 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased] - 20??/??/??
 
+## [Unreleased] - 2024/12/05
+
 ### Added
 
 - Day 03 implementation.
+
+- Day 03 solutions for part one and two.
 
 ### Changed
 
@@ -22,6 +26,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
     https://github.com/gitattributes/gitattributes/blob/master/Common.gitattributes
 
     https://github.com/gitattributes/gitattributes/blob/master/Python.gitattributes
+
+### Removed
+
+- Removed old variable references in advent_of_code.solutions.day_03.
 
 ## [2024.2.1] - 2024/12/04
 
