@@ -8,10 +8,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased] - 20??/??/??
 
 
-## [2024.0.0] - 2024/12/??
+## [2024.2.0] - 2024/12/04
 
 ### Added
 
 - Add this changelog file.
 
 - Add 'mkdocs' skeleton.
+
+- Move 2024 README to docs.
