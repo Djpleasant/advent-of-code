@@ -2,5 +2,7 @@ site_name: djpleasant - AoC
 
 nav:
   - Home: index.md
+  - Years:
+    - "2024": 2024.md
 
 theme: readthedocs
