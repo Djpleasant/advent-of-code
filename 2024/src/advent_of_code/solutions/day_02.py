@@ -19,13 +19,19 @@ from typing import (
 )
 import itertools
 
+from advent_of_code.utils import (
+    read_input_data,
+)
+
 # ----------#
 # Globals #
 # ----------#
+SOLUTION_NAME = "AoC 2024 - Day 02"
 INPUT_DATA_FILE = Path("static/day_02")
 
 LEVEL_MIN_VARIANCE = 1
 LEVEL_MAX_VARIANCE = 3
+
 
 class CliArguments(NamedTuple):
     input_data_file: Path
@@ -51,7 +57,7 @@ def _parse_cli_arguments(args: list[str]) -> CliArguments:
     # Create parser.
     parser = argparse.ArgumentParser(
         prog=__file__,
-        description="Aoc 2024 - Day 01.",
+        description=SOLUTION_NAME,
     )
 
     # Add cli arguments.
@@ -81,22 +87,6 @@ def _parse_input_data_row(row: str) -> list[int]:
     return list(processed_row)
 
 
-def _read_input_data(file: Path) -> None:
-    # Define reports container.
-    all_reports = []
-
-    # Get file contents.
-    with file.open("r", encoding="utf-8") as f:
-        data_lines = f.readlines()
-
-    # Create lists from the input data.
-    for line in data_lines:
-        reports = _parse_input_data_row(row=line)
-        all_reports.append(reports)
-
-    # Return lists.
-    return list(all_reports)
-
 def _get_report_with_level_removed(
     report: list[int], level_index: int
 ) -> list[int]:
@@ -104,10 +94,14 @@ def _get_report_with_level_removed(
     del filtered_report[level_index]
     return filtered_report
 
-def _get_level_step_observations(level: int, next_level: int) -> tuple[int, bool]:
+
+def _get_level_step_observations(
+    level: int, next_level: int
+) -> tuple[int, bool]:
     level_variance = abs(level - next_level)
     level_trend = next_level > level
     return (level_variance, level_trend)
+
 
 def _report_passes_draconian_standards(report: list[int]) -> bool:
     report_trending_direction: bool = None
@@ -142,7 +136,8 @@ def _report_passes_draconian_standards(report: list[int]) -> bool:
 
     return True
 
-def _report_passes_regular_standards(report: list[int]) -> bool|int:
+
+def _report_passes_regular_standards(report: list[int]) -> bool | int:
     # Set the report trend based on the first two elements.
     report_trend = report[1] > report[0]
     for level, next_level in itertools.pairwise(report):
@@ -159,7 +154,15 @@ def _report_passes_regular_standards(report: list[int]) -> bool|int:
             return False
     return True
 
-def do_part_one(reports: list[list[int]]) -> int:
+
+# -------#
+# Main #
+# -------#
+def do_part_one(input_data: list[str]) -> int:
+    # Deserialize reports.
+    reports = [_parse_input_data_row(report) for report in input_data]
+
+    # Determine good reports.
     good_reports_count = 0
     for report in reports:
         if _report_passes_draconian_standards(report=report):
@@ -167,7 +170,11 @@ def do_part_one(reports: list[list[int]]) -> int:
     return good_reports_count
 
 
-def do_part_two(reports: list[list[int]]) -> int:
+def do_part_two(input_data: list[str]) -> int:
+    # Deserialize reports.
+    reports = [_parse_input_data_row(report) for report in input_data]
+
+    # Determine good reports.
     good_reports_count = 0
     for report in reports:
         report_is_safe = _report_passes_regular_standards(report=report)
@@ -175,7 +182,9 @@ def do_part_two(reports: list[list[int]]) -> int:
             for i in range(len(report)):
                 _report = report.copy()
                 del _report[i]
-                report_is_safe = _report_passes_regular_standards(report=_report)
+                report_is_safe = _report_passes_regular_standards(
+                    report=_report
+                )
                 if report_is_safe:
                     break
         if report_is_safe:
@@ -185,25 +194,22 @@ def do_part_two(reports: list[list[int]]) -> int:
     return good_reports_count
 
 
-# -------#
-# Main #
-# -------#
 async def aentrypoint(args: list[str]) -> int:
     """Script entrypoint function."""
     # Get processed cli arguments.
     cli = _parse_cli_arguments(args=args)
 
-    # Get lists.
-    reports = _read_input_data(cli.input_data_file)
+    # Read in input data.
+    input_data = read_input_data(cli.input_data_file)
 
     # Determine the amount of good reports.
-    good_reports_by_draconian_standards = do_part_one(reports=reports)
-    good_reports_by_regular_standards = do_part_two(reports=reports)
+    part_one_result = do_part_one(input_data=input_data)
+    part_two_result = do_part_two(input_data=input_data)
 
     # Build data to output.
     output: Mapping[str, int] = {
-        "part_one": good_reports_by_draconian_standards,
-        "part_two": good_reports_by_regular_standards,
+        "part_one": part_one_result,
+        "part_two": part_two_result,
     }
 
     # Print list to stdout and return success.

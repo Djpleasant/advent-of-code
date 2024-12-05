@@ -10,13 +10,17 @@ import sys
 from pathlib import Path
 from typing import (
     NamedTuple,
-    Sequence,
-    Mapping,
+)
+
+from advent_of_code.utils import (
+    read_input_data,
 )
 
 # ----------#
 # Globals #
 # ----------#
+SOLUTION_NAME = "AoC 2024 - Day 01"
+
 INPUT_DATA_FILE = Path("static/day_01")
 
 
@@ -44,7 +48,7 @@ def _parse_cli_arguments(args: list[str]) -> CliArguments:
     # Create parser.
     parser = argparse.ArgumentParser(
         prog=__file__,
-        description="Aoc 2024 - Day 01.",
+        description=SOLUTION_NAME,
     )
 
     # Add cli arguments.
@@ -79,30 +83,22 @@ def _parse_input_data_row(row: str) -> tuple[int, int]:
     return (list_one_item, list_two_item)
 
 
-def _read_input_data(file: Path) -> tuple[Sequence[int], Sequence[int]]:
-    # Define lists.
-    list_one: Sequence[int] = []
-    list_two: Sequence[int] = []
+def _parse_lists_from_input_data(
+    input_data: list[str],
+) -> tuple[list[int], list[int]]:
+    # Define separate lists.
+    list_one: list[int] = []
+    list_two: list[int] = []
 
-    # Get file contents.
-    with file.open("r", encoding="utf-8") as f:
-        data_lines = f.readlines()
-
-    # Create lists from the input data.
-    for line in data_lines:
-        list_one_item, list_two_item = _parse_input_data_row(row=line)
+    for row in input_data:
+        list_one_item, list_two_item = _parse_input_data_row(row=row)
         list_one.append(list_one_item)
         list_two.append(list_two_item)
 
-    # Verify list lengths are the same.
-    if len(list_one) != len(list_two):
-        raise ValueError("List lengths do not match.", list_one, list_two)
-
-    # Return lists.
-    return (tuple(list_one), tuple(list_two))
+    return (list_one, list_two)
 
 
-def _pop_smallest_number(numbers: Sequence[int]) -> tuple[int, Sequence[int]]:
+def _pop_smallest_number(numbers: list[int]) -> tuple[int, list[int]]:
     # Get max int size so the first element is guaranteed to be smaller.
     min_number = sys.maxsize
     min_index = -1
@@ -120,19 +116,28 @@ def _pop_smallest_number(numbers: Sequence[int]) -> tuple[int, Sequence[int]]:
     return (min_number, trimmed_list)
 
 
-def do_part_one(list_one: Sequence[int], list_two: Sequence[int]) -> int:
+# -------#
+# Main #
+# -------#
+def do_part_one(input_data: list[str]) -> int:
+    # Deserialize lists data.
+    list_one, list_two = _parse_lists_from_input_data(input_data=input_data)
+
+    # Calculate distance between reports.
     total_distance = 0
     for _ in range(len(list_one)):
         list_one_smallest, list_one = _pop_smallest_number(numbers=list_one)
         list_two_smallest, list_two = _pop_smallest_number(numbers=list_two)
         if list_one_smallest != list_two_smallest:
             total_distance += abs(list_one_smallest - list_two_smallest)
+
+    # Return calculation.
     return total_distance
 
 
-def do_part_two(list_one: Sequence[int], list_two: Sequence[int]) -> int:
-    # Define score to add to.
-    simularity_score = 0
+def do_part_two(input_data: list[str]) -> int:
+    # Deserialize lists data.
+    list_one, list_two = _parse_lists_from_input_data(input_data=input_data)
 
     # Generate a map of unique list two numbers and how often they occur.
     list_two_hash = {}
@@ -141,6 +146,9 @@ def do_part_two(list_one: Sequence[int], list_two: Sequence[int]) -> int:
             list_two_hash[num] = list_two_hash[num] + 1
         else:
             list_two_hash[num] = 1
+
+    # Define score to add to.
+    simularity_score = 0
 
     # If the list one item appears in list two, multiply itself by the number
     # of instances found in list two, then add that to the total.
@@ -152,27 +160,22 @@ def do_part_two(list_one: Sequence[int], list_two: Sequence[int]) -> int:
     return simularity_score
 
 
-# -------#
-# Main #
-# -------#
-async def aentrypoint(args: Sequence[str]) -> int:
+async def aentrypoint(args: list[str]) -> int:
     """Script entrypoint function."""
     # Get processed cli arguments.
     cli = _parse_cli_arguments(args=args)
 
-    # Get lists.
-    list_one, list_two = _read_input_data(cli.input_data_file)
+    # Read in input data.
+    input_data = read_input_data(cli.input_data_file)
 
-    # Get the distance between the lists
-    total_distance = do_part_one(list_one=list_one, list_two=list_two)
-
-    # Get the simularity score.
-    simularity_score = do_part_two(list_one=list_one, list_two=list_two)
+    # Determine the amount of good reports.
+    part_one_result = do_part_one(input_data=input_data)
+    part_two_result = do_part_two(input_data=input_data)
 
     # Build data to output.
-    output: Mapping[str, int] = {
-        "part_one": total_distance,
-        "part_two": simularity_score,
+    output: dict[str, int] = {
+        "part_one": part_one_result,
+        "part_two": part_two_result,
     }
 
     # Print output to stdout and return success.

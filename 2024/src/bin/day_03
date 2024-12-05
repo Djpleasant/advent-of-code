@@ -21,6 +21,6 @@ main() {
   ${UV_EXEC} sync --no-dev
 
   # Run the day entrypoint.
-  ${UV_EXEC} run python -m advent_of_code.solutions.day_02 "${@}"
+  ${UV_EXEC} run python -m advent_of_code.solutions.day_03 "${@}"
 }
 main "${@}"

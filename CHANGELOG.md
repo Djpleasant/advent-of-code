@@ -7,6 +7,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased] - 20??/??/??
 
+### Added
+
+- Day 03 implementation.
+
+### Changed
+
+- Moved input data file read to common utils.
+
+- Used the new utils to DRY up days 01-03.
+
+- Added gitattributes templates.
+
+    https://github.com/gitattributes/gitattributes/blob/master/Common.gitattributes
+
+    https://github.com/gitattributes/gitattributes/blob/master/Python.gitattributes
+
 ## [2024.2.1] - 2024/12/04
 
 ### Added
