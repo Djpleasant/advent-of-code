@@ -1,0 +1,23 @@
+#!/bin/sh
+
+# Installs the AoC 2024 python environment.
+
+set -e
+
+# ----------#
+# Globals #
+# ----------#
+UV_EXEC=${UV_EXEC:-"uv"}
+
+# ------------#
+# Functions #
+# ------------#
+
+# -------#
+# Main #
+# -------#
+main() {
+  # Build documentation site.
+  ${UV_EXEC} run mkdocs serve
+}
+main "${@}"

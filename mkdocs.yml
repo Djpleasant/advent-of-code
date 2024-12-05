@@ -1,0 +1,6 @@
+site_name: djpleasant - AoC
+
+nav:
+  - Home: index.md
+
+theme: readthedocs

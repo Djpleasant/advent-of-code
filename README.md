@@ -1,15 +1,21 @@
-# aoc-python
+# advent-of-code
 
-This is a collection of my [Advent of Code](https://adventofcode.com/) attemps
-across the years.
+# Docs site
 
-In each year directory, there will be a README.md file. This file will detail
-what my goals were for this year's AoC. I want to try and use this event as a
-way to learn different tools or languages.
+In an effort to make this project navigable over time, there will be a
+documentation site managed by [mkdocs](https://www.mkdocs.org/)
 
-So if you are interested in what I was trying to do on a particular year, take
-a look at that file.
+- [Documentation Site](https://github.com/Djpleasant/advent-of-code)
 
-# Years
+# Conventions
 
-- [2024](./2024/README.md)
+This project will attempt to follow these best practices and conventions:
+
+- [Semantic Versioning](https://keepachangelog.com/en/1.0.0/)
+
+# Changelog
+
+A [changelog](./CHANGELOG.md) will be maintained in this project.
+
+I may stray into metaphor here and there,
+but I'll try to give a bullet list if it looks messy to even me.
